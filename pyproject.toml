@@ -1,0 +1,75 @@
+[project]
+name = "runner"
+version = "0.1.0"
+description = "Python Resident Scheduler and Task Runner"
+readme = "README.md"
+requires-python = ">=3.13"
+
+# These are the runtime deps Snyk will scan
+dependencies = [
+    "playwright>=1.56",
+    "pyee>=13.0.0",
+    "pyotp>=2.9.0",
+    "typing-extensions>=4.15.0",
+]
+
+# Optional dependency groups (uv understands these just fine)
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.6.0",
+    "pre-commit>=4.0.0",
+]
+
+# This creates a CLI command: `runner`
+# It expects a function `main()` in runner/runner.py
+[project.scripts]
+runner = "runner.main:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+# uv-specific metadata
+[tool.uv]
+package = true
+
+# --- Tooling configs below are optional but very sane defaults ---
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+extend-select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # import sorting
+    "B",  # bugbear
+]
+# You can relax or tighten these later
+ignore = [
+    "E501",  # line length (if you want to ignore)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.coverage.run]
+branch = true
+source = ["runner"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
